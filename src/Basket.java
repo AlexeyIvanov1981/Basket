@@ -94,4 +94,25 @@ public class Basket {
         }
         return null;
     }
+
+    public void saveBin(File file) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file);
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
+            objectOutputStream.writeObject(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Basket loadFromBinFile(File file) {
+        Basket basket = null;
+        try (FileInputStream fileInputStream = new FileInputStream(file);
+             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+            basket = (Basket)
+                    objectInputStream.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return basket;
+    }
 }
