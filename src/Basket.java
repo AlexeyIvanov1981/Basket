@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
 
 public class Basket {
 
@@ -22,16 +21,16 @@ public class Basket {
     public Basket(String[] productsName, int[] productsPrice) {
         this.productsName = productsName;
         this.productsPrice = productsPrice;
-        basketCount = new int[basketCount.length];
+        basketCount = new int[productsName.length];
     }
 
-    public void addToCart(int productNum, int amount){
+    public void addToCart(int productNum, int amount) {
         basketCount[productNum - 1] += amount;
     }
 
-    public void printCard(){
+    public void printCart() {
         int sum = 0;
-        for (int i = 0; i < productsName.length; i++){
+        for (int i = 0; i < productsName.length; i++) {
             sum += basketCount[i] * productsPrice[i];
         }
         System.out.println("You basket is: ");
@@ -42,22 +41,57 @@ public class Basket {
         }
         System.out.println("total sum: " + sum);
     }
+
     public void saveTxt(File textFile) {
         try (PrintWriter printWriter = new PrintWriter(textFile)) {
+
             for (String product : productsName) {
                 printWriter.print(product + " ");
+            }
+            printWriter.println();
+            for (int count : basketCount) {
+                printWriter.print(count + " ");
             }
             printWriter.println();
             for (int price : productsPrice) {
                 printWriter.print(price + " ");
             }
             printWriter.println();
-            for (int count : basketCount) {
-                printWriter.print(count + " ");
+            int sumTmp = 0;
+                for (int i = 0; i < productsName.length; i++) {
+                    if (basketCount[i] != 0) {
+                        sumTmp = basketCount[i] * productsPrice[i];
+                        printWriter.print(sumTmp + " ");
+                    } else printWriter.print(" - ");
+                }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static Basket loadFromTxtFile(File textFile) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Save.txt"))) {
+            String[] product = bufferedReader.readLine().split(" ");
+            String[] stringPrice = bufferedReader.readLine().split(" ");
+            String[] stringBasketCount = bufferedReader.readLine().split(" ");
+
+            int[] price = new int[stringPrice.length];
+            for (int i = 0; i < price.length; i++) {
+                price[i] = Integer.parseInt(stringPrice[i]);
             }
+
+            int[] basketCount = new int[stringBasketCount.length];
+            for (int i = 0; i < basketCount.length; i++) {
+                basketCount[i] = Integer.parseInt(stringBasketCount[i]);
+            }
+
+            Basket basket = new Basket(product, price);
+            basket.basketCount = basketCount;
+            return basket;
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
