@@ -56,14 +56,14 @@ public class Basket {
             for (int price : productsPrice) {
                 printWriter.print(price + " ");
             }
-            printWriter.println();
-            int sumTmp = 0;
-                for (int i = 0; i < productsName.length; i++) {
-                    if (basketCount[i] != 0) {
-                        sumTmp = basketCount[i] * productsPrice[i];
-                        printWriter.print(sumTmp + " ");
-                    } else printWriter.print(" - ");
-                }
+//            printWriter.println();
+//            int sumTmp = 0;
+//                for (int i = 0; i < productsName.length; i++) {
+//                    if (basketCount[i] != 0) {
+//                        sumTmp = basketCount[i] * productsPrice[i];
+//                        printWriter.print(sumTmp + " ");
+//                    } else printWriter.print(" - ");
+//                }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -7,7 +7,7 @@ public class Main {
         Basket basket = new Basket(new String[]{"Хлеб","Молоко","Масло"}, new int[]{30,60,90});
 
         while(true) {
-            System.out.println("Введите товар и количество или введите \"end\"");
+            System.out.println("Введите товар и количество или введите 'end'");
             Scanner scanner = new Scanner(System.in);
             String input = scanner.nextLine();
             if (input.equals("end")) {
@@ -23,9 +23,10 @@ public class Main {
 //        basket.addToCart(1,10);
 //        basket.addToCart(2,20);
 //        basket.addToCart(3,30);
+//        basket.addToCart(2,5);
 
         basket.saveTxt(new File("Save.txt"));
         Basket basketToLoad = Basket.loadFromTxtFile(new File("Save.txt"));
-        basketToLoad.printCart();
+//        basketToLoad.printCart();
     }
 }
