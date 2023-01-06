@@ -1,10 +1,13 @@
 import java.io.*;
 
-public class Basket {
+
+public class Basket implements Serializable {
 
     private String[] productsName;
     private int[] productsPrice;
     private int[] basketCount;
+    private static long serialVersionUID = 1L;
+
 
     public String[] getProductsName() {
         return productsName;
@@ -98,9 +101,9 @@ public class Basket {
     public void saveBin(File file) {
         try (FileOutputStream fileOutputStream = new FileOutputStream(file);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-            objectOutputStream.writeObject(this);
-        } catch (IOException e) {
-            e.printStackTrace();
+            objectOutputStream.writeObject(file);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -108,10 +111,9 @@ public class Basket {
         Basket basket = null;
         try (FileInputStream fileInputStream = new FileInputStream(file);
              ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
-            basket = (Basket)
-                    objectInputStream.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
+            basket = (Basket) objectInputStream.readObject();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
         }
         return basket;
     }
