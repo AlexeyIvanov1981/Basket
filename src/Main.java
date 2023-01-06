@@ -7,7 +7,7 @@ public class Main {
         Basket basket = new Basket(new String[]{"Хлеб","Молоко","Масло"}, new int[]{30,60,90});
 
 //        while(true) {
-//            System.out.println("Введите товар и количество или введите \"end\"");
+//            System.out.println("Введите товар и количество или введите 'end'");
 //            Scanner scanner = new Scanner(System.in);
 //            String input = scanner.nextLine();
 //            if (input.equals("end")) {
