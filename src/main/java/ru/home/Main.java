@@ -1,3 +1,7 @@
+package ru.home;
+
+import ru.home.Basket;
+
 import java.io.File;
 import java.util.Scanner;
 
