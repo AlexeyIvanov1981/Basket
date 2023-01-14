@@ -1,16 +1,19 @@
 package ru.home;
 
-import ru.home.Basket;
-
 import java.io.File;
 import java.util.Scanner;
 
 public class Main {
+    private static final String EXPORT_LOG_FILENAME = "log.csv";
+    private static final String BASKET_FILENAME_TXT = "basket.txt";
+    private static final String BASKET_FILENAME_JSON = "basket.json";
+
     public static void main(String[] args) {
+        Basket basket = Basket.loadBasketFromJsonFile(new File(BASKET_FILENAME_JSON));
 
-        Basket basket = new Basket(new String[]{"Хлеб","Молоко","Масло"}, new int[]{30,60,90});
+        ClientLog clientLog = new ClientLog();
 
-        while(true) {
+        while (true) {
             System.out.println("Введите товар и количество или введите 'end'");
             Scanner scanner = new Scanner(System.in);
             String input = scanner.nextLine();
@@ -19,18 +22,15 @@ public class Main {
                 break;
             } else {
                 String[] parts = input.split(" ");
-                basket.addToCart(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+                final int productNum = Integer.parseInt(parts[0]);
+                final int productAmount = Integer.parseInt(parts[1]);
+
+                basket.addToCart(productNum, productAmount);
+                clientLog.log(productNum, productAmount);
             }
         }
 
-
-//        basket.addToCart(1,10);
-//        basket.addToCart(2,20);
-//        basket.addToCart(3,30);
-//        basket.addToCart(2,5);
-
-        basket.saveTxt(new File("Save.txt"));
-        Basket basketToLoad = Basket.loadFromTxtFile(new File("Save.txt"));
-//        basketToLoad.printCart();
+        basket.saveBasketToJsonFile(basket, new File(BASKET_FILENAME_JSON));
+        clientLog.exportAsCSV(new File(EXPORT_LOG_FILENAME));
     }
 }

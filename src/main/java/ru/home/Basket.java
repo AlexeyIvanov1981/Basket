@@ -1,12 +1,14 @@
 package ru.home;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
 
 public class Basket {
-
-    private String[] productsName;
-    private int[] productsPrice;
-    private int[] basketCount;
+    private final String[] productsName;
+    private final int[] productsPrice;
+    private int[] productCountInBasket;
 
     public String[] getProductsName() {
         return productsName;
@@ -16,66 +18,57 @@ public class Basket {
         return productsPrice;
     }
 
-    public int[] getBasketCount() {
-        return basketCount;
+    public int[] getProductCountInBasket() {
+        return productCountInBasket;
     }
 
     public Basket(String[] productsName, int[] productsPrice) {
         this.productsName = productsName;
         this.productsPrice = productsPrice;
-        basketCount = new int[productsName.length];
+        this.productCountInBasket = new int[productsName.length];
     }
 
     public void addToCart(int productNum, int amount) {
-        basketCount[productNum - 1] += amount;
+        this.productCountInBasket[productNum - 1] += amount;
     }
 
     public void printCart() {
         int sum = 0;
         for (int i = 0; i < productsName.length; i++) {
-            sum += basketCount[i] * productsPrice[i];
+            sum += productCountInBasket[i] * productsPrice[i];
         }
         System.out.println("You basket is: ");
 
         for (int i = 0; i < productsName.length; i++) {
-            System.out.println(productsName[i] + ": " + basketCount[i] + " шт по цене " + productsPrice[i] +
-                    " руб/шт, сумма " + basketCount[i] * productsPrice[i] + " рублей");
+            System.out.println(productsName[i] + ": " + productCountInBasket[i] + " шт по цене " + productsPrice[i] +
+                    " руб/шт, сумма " + productCountInBasket[i] * productsPrice[i] + " рублей");
         }
         System.out.println("total sum: " + sum);
     }
 
     public void saveTxt(File textFile) {
         try (PrintWriter printWriter = new PrintWriter(textFile)) {
-
             for (String product : productsName) {
                 printWriter.print(product + " ");
             }
             printWriter.println();
-            for (int count : basketCount) {
+            for (int count : productCountInBasket) {
                 printWriter.print(count + " ");
             }
             printWriter.println();
             for (int price : productsPrice) {
                 printWriter.print(price + " ");
             }
-//            printWriter.println();
-//            int sumTmp = 0;
-//                for (int i = 0; i < productsName.length; i++) {
-//                    if (basketCount[i] != 0) {
-//                        sumTmp = basketCount[i] * productsPrice[i];
-//                        printWriter.print(sumTmp + " ");
-//                    } else printWriter.print(" - ");
-//                }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    static Basket loadFromTxtFile(File textFile) {
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader("Save.txt"))) {
+    public static Basket loadFromTxtFile(File textFile) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(textFile))) {
             String[] product = bufferedReader.readLine().split(" ");
-            String[] stringPrice = bufferedReader.readLine().split(" ");
             String[] stringBasketCount = bufferedReader.readLine().split(" ");
+            String[] stringPrice = bufferedReader.readLine().split(" ");
 
             int[] price = new int[stringPrice.length];
             for (int i = 0; i < price.length; i++) {
@@ -88,12 +81,31 @@ public class Basket {
             }
 
             Basket basket = new Basket(product, price);
-            basket.basketCount = basketCount;
+            basket.productCountInBasket = basketCount;
             return basket;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 
+    public static Basket loadBasketFromJsonFile(File jsonFile) {
+        try (FileReader fileReader = new FileReader(jsonFile)) {
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            return gson.fromJson(fileReader, Basket.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void saveBasketToJsonFile(Basket basket, File jsonFile) {
+        try (FileWriter fileWriter = new FileWriter(jsonFile)) {
+            GsonBuilder builder = new GsonBuilder();
+            Gson gson = builder.create();
+            gson.toJson(basket, fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
     }
 }
