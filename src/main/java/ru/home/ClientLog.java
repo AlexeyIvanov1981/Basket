@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ClientLog {
     private static final char EXPORT_FILE_SEPARATOR = ',';
-    private static final String[] EXPORT_LOG_FILE_TITLE = {"productNum", "amount"};
+    private static final String[] EXPORT_LOG_FILE_TITLE = {"ProductNum", "Amount"};
 
     private final List<String[]> clientLog = new ArrayList<>();
 
@@ -22,8 +22,8 @@ public class ClientLog {
                 });
     }
 
-    public void exportAsCSV(File txtFile) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(txtFile), EXPORT_FILE_SEPARATOR)) {
+    public void exportAsCSV(File filename) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(filename), EXPORT_FILE_SEPARATOR)) {
             writer.writeNext(EXPORT_LOG_FILE_TITLE);
             writer.writeAll(clientLog);
         } catch (IOException e) {

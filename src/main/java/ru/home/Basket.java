@@ -46,7 +46,7 @@ public class Basket {
         System.out.println("total sum: " + sum);
     }
 
-    public void saveTxt(File textFile) {
+    public void saveBasketToTextFile(File textFile) {
         try (PrintWriter printWriter = new PrintWriter(textFile)) {
             for (String product : productsName) {
                 printWriter.print(product + " ");
@@ -99,11 +99,11 @@ public class Basket {
         }
     }
 
-    public void saveBasketToJsonFile(Basket basket, File jsonFile) {
+    public void saveBasketToJsonFile(File jsonFile) {
         try (FileWriter fileWriter = new FileWriter(jsonFile)) {
             GsonBuilder builder = new GsonBuilder();
             Gson gson = builder.create();
-            gson.toJson(basket, fileWriter);
+            gson.toJson(this, fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
         }
